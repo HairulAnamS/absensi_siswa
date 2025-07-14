@@ -1,0 +1,30 @@
+
+
+<h3>Rekap Absensi</h3>
+<a href="/absensi/input">Input Absensi Hari Ini</a>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tanggal</th><th>Kelas</th><th>NIS</th><th>Nama</th>
+      <th>Kehadiran</th><th>Keterangan</th><th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% absensi.forEach(a => { %>
+      <tr>
+        <td><%= a.tanggal.toISOString().split('T')[0] %></td>
+        <td><%= a.kelas %></td>
+        <td><%= a.nis %></td>
+        <td><%= a.nama %></td>
+        <td><%= a.kehadiran %></td>
+        <td><%= a.keterangan %></td>
+        <td>
+          <form action="/absensi/hapus/<%= a.id %>" method="POST">
+            <button onclick="return confirm('Hapus?')">Hapus</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

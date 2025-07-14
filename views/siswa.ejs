@@ -1,0 +1,38 @@
+
+<h3>Data Siswa</h3>
+
+<form action="/siswa/tambah" method="POST">
+  <input type="text" name="nis" placeholder="NIS" required>
+  <input type="text" name="nama" placeholder="Nama" required>
+  <select name="jk">
+    <option value="L">Laki-laki</option>
+    <option value="P">Perempuan</option>
+  </select>
+  <select name="kelas_id">
+    <% kelas.forEach(k => { %>
+      <option value="<%= k.id %>"><%= k.nama %></option>
+    <% }) %>
+  </select>
+  <button type="submit">Tambah</button>
+</form>
+
+<table>
+  <thead>
+    <tr><th>Aksi</th><th>NIS</th><th>Nama</th><th>JK</th><th>Kelas</th></tr>
+  </thead>
+  <tbody>
+    <% siswa.forEach(s => { %>
+      <tr>
+        <td>
+          <form action="/siswa/hapus/<%= s.id %>" method="POST" style="display:inline">
+            <button onclick="return confirm('Hapus data?')">Hapus</button>
+          </form>
+        </td>
+        <td><%= s.nis %></td>
+        <td><%= s.nama %></td>
+        <td><%= s.jk %></td>
+        <td><%= s.nama_kelas %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,26 @@
+<h3>Data Kelas</h3>
+
+<form action="/kelas/tambah" method="POST">
+  <input type="text" name="kode" placeholder="Kode" required>
+  <input type="text" name="nama" placeholder="Nama Kelas" required>
+  <button type="submit">Tambah</button>
+</form>
+
+<table>
+  <thead>
+    <tr><th>Aksi</th><th>Kode</th><th>Nama</th></tr>
+  </thead>
+  <tbody>
+    <% kelas.forEach(k => { %>
+      <tr>
+        <td>
+          <form action="/kelas/hapus/<%= k.id %>" method="POST" style="display:inline">
+            <button onclick="return confirm('Hapus data?')">Hapus</button>
+          </form>
+        </td>
+        <td><%= k.kode %></td>
+        <td><%= k.nama %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,53 @@
+
+
+<h3>Input Absensi</h3>
+
+<!-- Form pilih kelas -->
+<form method="GET" action="/absensi/input">
+  <label for="kelas_id">Pilih Kelas:</label>
+  <select name="kelas_id" id="kelas_id" onchange="this.form.submit()">
+    <option value="">-- Pilih Kelas --</option>
+    <% kelas.forEach(k => { %>
+      <option value="<%= k.id %>" <%= selectedKelasId == k.id ? 'selected' : '' %>><%= k.nama %></option>
+    <% }) %>
+  </select>
+</form>
+
+<% if (siswa.length > 0) { %>
+  <form method="POST" action="/absensi/simpan">
+    <input type="hidden" name="tanggal" value="<%= today %>">
+    <input type="hidden" name="kelas_id" value="<%= selectedKelasId %>">
+
+    <table>
+      <thead>
+        <tr>
+          <th>NIS</th>
+          <th>Nama</th>
+          <th>Kehadiran</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% siswa.forEach(s => { %>
+          <tr>
+            <td><%= s.nis %></td>
+            <td><%= s.nama %></td>
+            <td>
+              <select name="kehadiran">
+                <option value="Hadir">Hadir</option>
+                <option value="Ijin">Ijin</option>
+                <option value="Sakit">Sakit</option>
+                <option value="Alpha">Alpha</option>
+              </select>
+              <input type="hidden" name="siswa_id" value="<%= s.id %>">
+            </td>
+            <td><input type="text" name="keterangan"></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <button type="submit">Simpan</button>
+    <a href="/absensi">Batal</a>
+  </form>
+<% } %>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Absensi</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <% if (session && session.loggedIn) { %>
+      <%- include('../partials/sidebar') %>
+
+        <div class="content">
+          <header>
+            <h2>Sistem Absensi Siswa</h2>
+          </header>
+
+          <main>
+            <%- body %>
+          </main>
+        </div>
+        <% } else { %>
+          <!-- Jika belum login, tampilkan hanya body -->
+          <div class="login-page">
+            <%- body %>
+          </div>
+          <% } %>
+  </div>
+</body>
+
+</html>
