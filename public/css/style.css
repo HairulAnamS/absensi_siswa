@@ -15,6 +15,9 @@ body {
   background-color: #2c3e50;
   color: #fff;
   padding: 20px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar .user-info {
@@ -23,7 +26,7 @@ body {
 }
 
 .sidebar .avatar {
-  width: 60px;
+  width: 100px;
   border-radius: 50%;
   margin-bottom: 10px;
 }
@@ -43,38 +46,33 @@ body {
   padding: 12px 16px;
   text-decoration: none;
   color: white;
-  background-color: #2c3e50; /* match sidebar */
+  background-color: #2c3e50;
+  /* match sidebar */
   transition: background-color 0.3s;
 }
 
-.menu li a:hover {
-  background-color: #d0d0d0; /* Saat hover */
+.menu li a:hover, .logout a:hover {
+  background-color: #d0d0d0;
+  /* Saat hover */
   color: #000;
 }
 
 .menu li.active a {
-  background-color: #007BFF; /* Saat aktif */
+  background-color: #007BFF;
+  /* Saat aktif */
   color: #fff;
 }
 
-
-/* .sidebar nav ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar nav ul li {
-  margin: 10px 0;
-}
-
-.sidebar nav ul li a {
-  color: #fff;
+.logout a {
+  display: block;
+  padding: 12px 16px;
   text-decoration: none;
+  color: white;
+  background-color: #2c3e50;
+  /* match sidebar */
+  transition: background-color 0.3s;
 }
 
-.sidebar nav ul li a:hover {
-  text-decoration: underline;
-} */
 
 /* Konten */
 .content {
@@ -110,12 +108,55 @@ button {
   margin: 5px;
   background-color: #2980b9;
   color: white;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
 }
 
 button:hover {
   background-color: #3498db;
+}
+
+.btnHapus {
+  padding: 6px 12px;
+  margin: 5px;
+  background-color: #cc0000;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btnHapus:hover {
+  background-color: #ff0000;
+}
+
+.btnEdit {
+  padding: 6px 12px;
+  margin: 5px;
+  background-color: #2980b9;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btnEdit:hover {
+  background-color: #3498db;
+}
+
+.btnCancel {
+  padding: 6px 12px;
+  margin: 5px;
+  background-color: #696969;
+  color: white;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btnCancel:hover {
+  background-color: #555555;
 }
 
 /* Table */
@@ -126,11 +167,14 @@ table {
   margin-top: 10px;
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid #ccc;
 }
 
-th, td {
+th,
+td {
   padding: 8px;
   text-align: left;
 }
@@ -141,7 +185,7 @@ th, td {
   margin: 80px auto;
   padding: 30px;
   background: #fff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .login-box h2 {
@@ -169,4 +213,13 @@ th, td {
   margin: 0 auto;
   padding: 40px;
   max-width: 400px;
+}
+
+.logout {
+  margin-top: auto;
+  /* Ini yang dorong ke bawah */
+}
+
+input[readonly] {
+  background-color: #f0f0f0;
 }

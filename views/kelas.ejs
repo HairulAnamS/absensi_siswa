@@ -1,26 +1,90 @@
 <h3>Data Kelas</h3>
 
-<form action="/kelas/tambah" method="POST">
-  <input type="text" name="kode" placeholder="Kode" required>
-  <input type="text" name="nama" placeholder="Nama Kelas" required>
-  <button type="submit">Tambah</button>
+<% if (typeof error !== 'undefined') { %>
+  <div style="color: red; margin-bottom: 10px;"><%= error %></div>
+<% } %>
+
+<form id="formKelas" action="/kelas/tambah" method="POST">
+  <input type="hidden" name="id" id="kelasId">
+  <input type="text" name="kode" id="kode" placeholder="Kode" required>
+  <input type="text" name="nama" id="nama" placeholder="Nama Kelas" required>
+  <button type="submit" id="submitBtn">Tambah</button>
+  <button class="btnCancel" type="button" id="cancelBtn" style="display:none;">Batal</button>
 </form>
 
 <table>
   <thead>
-    <tr><th>Aksi</th><th>Kode</th><th>Nama</th></tr>
+    <tr>
+      <th style="width: 140px;">Aksi</th>
+      <th>Kode</th>
+      <th>Nama</th>
+    </tr>
   </thead>
   <tbody>
-    <% kelas.forEach(k => { %>
+    <% kelas.forEach(k=> { %>
       <tr>
         <td>
+          <button type="button" class="btnEdit" data-id="<%= k.id %>" data-kode="<%= k.kode %>"
+            data-nama="<%= k.nama %>">
+            Edit
+          </button>
+
+
           <form action="/kelas/hapus/<%= k.id %>" method="POST" style="display:inline">
-            <button onclick="return confirm('Hapus data?')">Hapus</button>
+            <button class="btnHapus" onclick="return confirm('Hapus data?')">Hapus</button>
           </form>
         </td>
-        <td><%= k.kode %></td>
-        <td><%= k.nama %></td>
+        <td>
+          <%= k.kode %>
+        </td>
+        <td>
+          <%= k.nama %>
+        </td>
       </tr>
-    <% }) %>
+      <% }) %>
   </tbody>
 </table>
+
+<script>
+  const form = document.getElementById('formKelas');
+  const submitBtn = document.getElementById('submitBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const inputKode = document.getElementById('kode');
+
+  document.querySelectorAll('.btnEdit').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const id = this.dataset.id;
+      const kode = this.dataset.kode;
+      const nama = this.dataset.nama;
+
+      // Isi form
+      document.getElementById('kelasId').value = id;
+      document.getElementById('kode').value = kode;
+      document.getElementById('nama').value = nama;
+
+      // Ubah action form & label tombol
+      form.action = `/kelas/edit/${id}`;
+      submitBtn.textContent = 'Update';
+      cancelBtn.style.display = 'inline'; // tampilkan tombol batal
+
+      // Buat input kode readonly
+      inputKode.readOnly = true;
+    });
+  });
+
+  // Fungsi tombol batal
+  cancelBtn.addEventListener('click', function () {
+    // Reset nilai input
+    document.getElementById('kelasId').value = '';
+    document.getElementById('kode').value = '';
+    document.getElementById('nama').value = '';
+
+    // Kembalikan form ke mode tambah
+    form.action = '/kelas/tambah';
+    submitBtn.textContent = 'Tambah';
+    cancelBtn.style.display = 'none';
+
+    // Kembalikan input kode bisa diisi
+    inputKode.readOnly = false;
+  });
+</script>

@@ -16,4 +16,11 @@ const remove = (id, callback) => {
   db.query('DELETE FROM kelas WHERE id = ?', [id], callback);
 };
 
-module.exports = { getAll, insert, update, remove };
+const findByKode = (kode, callback) => {
+  db.query('SELECT * FROM kelas WHERE kode = ?', [kode], (err, results) => {
+    if (err) return callback(err);
+    callback(null, results[0]); // kembalikan 1 data jika ada
+  });
+};
+
+module.exports = { getAll, insert, update, remove, findByKode };

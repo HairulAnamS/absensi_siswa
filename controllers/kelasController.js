@@ -11,9 +11,27 @@ exports.list = (req, res) => {
 
 exports.tambah = (req, res) => {
   const { kode, nama } = req.body;
-  Kelas.insert({ kode, nama }, () => {
-    res.redirect('/kelas');
+
+  Kelas.findByKode(kode, (err, existing) => {
+    if (err) return res.send('Terjadi kesalahan saat mengecek kode.');
+
+    if (existing) {
+      // Jika kode sudah ada, tampilkan peringatan
+      Kelas.getAll((err, rows) => {
+        res.render('kelas', {
+          user: req.session.nama,
+          kelas: rows,
+          error: 'Kode kelas sudah ada.'
+        });
+      });
+    } else {
+      // Jika tidak ada, lanjut tambah
+      Kelas.insert({ kode, nama }, () => {
+        res.redirect('/kelas');
+      });
+    }
   });
+
 };
 
 exports.hapus = (req, res) => {
