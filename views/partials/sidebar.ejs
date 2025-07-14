@@ -1,7 +1,10 @@
 <aside class="sidebar">
   <div class="user-info">
-    <img src="/img/avatar.png" alt="User Avatar" class="avatar">
+    <img src="/img/avatar2.png" alt="User Avatar" class="avatar">
+    <div class="user-label">Admin</div>
   </div>
+
+  <br></br>
 
   <ul class="menu">
     <li class="<%= (path === '/kelas') ? 'active' : '' %>">
@@ -13,8 +16,10 @@
     <li class="<%= (path.startsWith('/absensi')) ? 'active' : '' %>">
       <a href="/absensi">Absensi</a>
     </li>
-    <li>
-      <a href="/logout">Logout</a>
-    </li>
   </ul>
+
+  <!-- Tambahkan menu logout di luar <ul class="menu"> -->
+  <div class="logout">
+    <a href="/logout">Logout</a>
+  </div>
 </aside>
