@@ -12,6 +12,15 @@
   <button class="btnCancel" type="button" id="cancelBtn" style="display:none;">Batal</button>
 </form>
 
+<!-- Tombol Toggle Filter -->
+<button type="button" onclick="toggleFilter()" style="margin-top: 10px;">Tampilkan/Sembunyikan Filter</button>
+
+<!-- Form Filter -->
+<form id="formFilter" action="/kelas" method="GET" style="display:block; margin-top: 10px;">
+  <input type="text" name="cari" placeholder="Cari nama kelas..." value="<%= typeof filter !== 'undefined' ? filter : '' %>">
+  <button type="submit">Filter</button>
+</form>
+
 <table>
   <thead>
     <tr>
@@ -87,4 +96,9 @@
     // Kembalikan input kode bisa diisi
     inputKode.readOnly = false;
   });
+
+  function toggleFilter() {
+    const form = document.getElementById('formFilter');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
 </script>
