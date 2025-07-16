@@ -23,4 +23,14 @@ const findByKode = (kode, callback) => {
   });
 };
 
-module.exports = { getAll, insert, update, remove, findByKode };
+const filterByKolom = (kolom, nilai, callback) => {
+  const allowed = ['kode', 'nama']; // validasi kolom yang boleh
+  if (!allowed.includes(kolom)) {
+    return callback(null, []); // return kosong kalau kolom tidak valid
+  }
+
+  const sql = `SELECT * FROM kelas WHERE ${kolom} LIKE ? ORDER BY nama`;
+  db.query(sql, [`%${nilai}%`], callback);
+};
+
+module.exports = { getAll, insert, update, remove, findByKode, filterByKolom };
