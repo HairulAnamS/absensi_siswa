@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Aplikasi sistem absensi siswa menggunakan Node.js, EJS, MySQL, dan arsitektur MVC.",
   "main": "app.js",
+  "bin": "app.js",
+  "pkg": {
+    "assets": [
+      "views/**/*",
+      "public/**/*"
+    ]
+  },
   "scripts": {
     "start": "node app.js"
   },
@@ -14,6 +21,7 @@
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.3",
-    "mysql2": "^3.14.2"
+    "mysql2": "^3.14.2",
+    "open": "^10.2.0"
   }
 }

@@ -1,38 +1,136 @@
-
 <h3>Data Siswa</h3>
 
-<form action="/siswa/tambah" method="POST">
-  <input type="text" name="nis" placeholder="NIS" required>
-  <input type="text" name="nama" placeholder="Nama" required>
-  <select name="jk">
-    <option value="L">Laki-laki</option>
-    <option value="P">Perempuan</option>
-  </select>
-  <select name="kelas_id">
-    <% kelas.forEach(k => { %>
-      <option value="<%= k.id %>"><%= k.nama %></option>
-    <% }) %>
-  </select>
-  <button type="submit">Tambah</button>
-</form>
+<% if (typeof error !=='undefined' ) { %>
+  <div style="color: red; margin-bottom: 10px;">
+    <%= error %>
+  </div>
+  <% } %>
 
-<table>
-  <thead>
-    <tr><th>Aksi</th><th>NIS</th><th>Nama</th><th>JK</th><th>Kelas</th></tr>
-  </thead>
-  <tbody>
-    <% siswa.forEach(s => { %>
-      <tr>
-        <td>
-          <form action="/siswa/hapus/<%= s.id %>" method="POST" style="display:inline">
-            <button onclick="return confirm('Hapus data?')">Hapus</button>
-          </form>
-        </td>
-        <td><%= s.nis %></td>
-        <td><%= s.nama %></td>
-        <td><%= s.jk %></td>
-        <td><%= s.nama_kelas %></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+    <form id="formSiswa" action="/siswa/tambah" method="POST">
+      <input type="hidden" name="id" id="siswaId">
+      <input type="text" name="nis" id="nis" placeholder="NIS" required>
+      <input type="text" name="nama" id="nama" placeholder="Nama" required>
+      <select name="jk" id="jk">
+        <option value="L">Laki-laki</option>
+        <option value="P">Perempuan</option>
+      </select>
+      <select name="kelas_id" id="kelas">
+        <% kelas.forEach(k=> { %>
+          <option value="<%= k.id %>">
+            <%= k.nama %>
+          </option>
+          <% }) %>
+      </select>
+      <!-- <button type="submit">Tambah</button> -->
+      <button type="submit" id="submitBtn">Tambah</button>
+      <button class="btnCancel" type="button" id="cancelBtn" style="display:none;">Batal</button>
+    </form>
+
+    <!-- Tombol Toggle Filter -->
+    <button type="button" onclick="toggleFilter()" style="margin-top: 10px;">Tampilkan/Sembunyikan Filter</button>
+
+    <!-- Form Filter -->
+    <form id="formFilter" action="/siswa" method="GET"style="<%= typeof filter !== 'undefined' && filter !== '' ? 'display:block;' : 'display:none;' %>; margin-top: 10px;">
+      <label>Cari Data :</label>
+      <input type="text" name="cari" placeholder="Masukkan kata kunci..."
+        value="<%= typeof filter !== 'undefined' ? filter : '' %>">
+      <button type="submit">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 140px;">Aksi</th>
+          <th>NIS</th>
+          <th>Nama</th>
+          <th style="width: 100px;">Jenis Kelamin</th>
+          <th>Kelas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% siswa.forEach(s=> { %>
+          <tr>
+            <td>
+              <button type="button" class="btnEdit" data-id="<%= s.id %>" data-nis="<%= s.nis %>"
+                data-nama="<%= s.nama %>" data-jk="<%= s.jk %>" data-kelas_id="<%= s.kelas_id %>">
+                Edit
+              </button>
+
+              <form action="/siswa/hapus/<%= s.id %>" method="POST" style="display:inline">
+                <button class="btnHapus" onclick="return confirm('Hapus data?')">Hapus</button>
+              </form>
+            </td>
+            <td>
+              <%= s.nis %>
+            </td>
+            <td>
+              <%= s.nama %>
+            </td>
+            <td>
+              <%= s.jk === 'L' ? 'Laki-laki' : 'Perempuan' %>
+            </td>
+            <td>
+              <%= s.nama_kelas %>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+    <br></br>
+
+    <script>
+      const form = document.getElementById('formSiswa');
+      const submitBtn = document.getElementById('submitBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const inputNIS = document.getElementById('nis');
+      const inputJK = document.getElementById('jk');
+      const inputKelas = document.getElementById('kelas');
+
+      document.querySelectorAll('.btnEdit').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const id = this.dataset.id;
+          const nis = this.dataset.nis;
+          const nama = this.dataset.nama;
+          const jk = this.dataset.jk;
+          const kelasId = this.dataset.kelas_id;
+
+          // Isi form
+          document.getElementById('siswaId').value = id;
+          document.getElementById('nis').value = nis;
+          document.getElementById('nama').value = nama;
+          inputJK.value = jk;
+          inputKelas.value = kelasId;
+
+          // Ubah action form & label tombol
+          form.action = `/siswa/edit/${id}`;
+          submitBtn.textContent = 'Update';
+          cancelBtn.style.display = 'inline'; // tampilkan tombol batal
+
+          // Buat input kode readonly
+          inputNIS.readOnly = true;
+        });
+      });
+
+      // Fungsi tombol batal
+      cancelBtn.addEventListener('click', function () {
+        // Reset nilai input
+        document.getElementById('siswaId').value = '';
+        document.getElementById('nis').value = '';
+        document.getElementById('nama').value = '';
+        inputJK.value = 'L';
+        inputKelas.selectedIndex = 0;
+
+        // Kembalikan form ke mode tambah
+        form.action = '/siswa/tambah';
+        submitBtn.textContent = 'Tambah';
+        cancelBtn.style.display = 'none';
+
+        // Kembalikan input kode bisa diisi
+        inputNIS.readOnly = false;
+      });
+
+      function toggleFilter() {
+        const form = document.getElementById('formFilter');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      }
+    </script>

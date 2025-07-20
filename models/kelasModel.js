@@ -23,4 +23,21 @@ const findByKode = (kode, callback) => {
   });
 };
 
-module.exports = { getAll, insert, update, remove, findByKode };
+const search = (keyword, callback) => {
+  const q = `%${keyword}%`;
+  db.query('SELECT * FROM kelas WHERE kode LIKE ? OR nama LIKE ? ORDER BY nama', [q, q], callback);
+};
+
+const filterByKolom = (kolom, nilai, callback) => {
+  const allowed = ['kode', 'nama']; // validasi kolom yang boleh
+  if (!allowed.includes(kolom)) {
+    return callback(null, []); // return kosong kalau kolom tidak valid
+  }
+
+  // const sql = `SELECT * FROM kelas WHERE ${kolom} LIKE ? ORDER BY nama`;
+  // db.query(sql, [`%${nilai}%`], callback);
+  const q = `%${nilai}%`;
+  db.query('SELECT * FROM kelas WHERE kode LIKE ? OR nama LIKE ? ORDER BY nama', [q, q], callback);
+};
+
+module.exports = { getAll, insert, update, remove, findByKode, search, filterByKolom };

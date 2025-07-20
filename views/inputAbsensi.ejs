@@ -1,39 +1,50 @@
-
-
 <h3>Input Absensi</h3>
 
-<!-- Form pilih kelas -->
+<!-- Form pilih tanggal dan kelas -->
 <form method="GET" action="/absensi/input">
+  <!-- <div class="left"> -->
+  <label for="tanggal">Tanggal:</label>
+  <input type="date" id="tanggal" name="tanggal" style="margin-right: 20px;" max="<%= today %>" value="<%= tanggal %>"
+    required>
+  <!-- </div> -->
+
+  <!-- <div class="right"> -->
   <label for="kelas_id">Pilih Kelas:</label>
   <select name="kelas_id" id="kelas_id" onchange="this.form.submit()">
     <option value="">-- Pilih Kelas --</option>
-    <% kelas.forEach(k => { %>
-      <option value="<%= k.id %>" <%= selectedKelasId == k.id ? 'selected' : '' %>><%= k.nama %></option>
-    <% }) %>
+    <% kelas.forEach(k=> { %>
+      <option value="<%= k.id %>" <%=selectedKelasId==k.id ? 'selected' : '' %>><%= k.nama %>
+      </option>
+      <% }) %>
   </select>
+  <!-- </div> -->
 </form>
 
-<% if (siswa.length > 0) { %>
+<% if (siswa.length> 0) { %>
   <form method="POST" action="/absensi/simpan">
-    <input type="hidden" name="tanggal" value="<%= today %>">
+    <input type="hidden" name="tanggal" value="<%= tanggal %>">
     <input type="hidden" name="kelas_id" value="<%= selectedKelasId %>">
 
     <table>
       <thead>
         <tr>
           <th>NIS</th>
-          <th>Nama</th>
-          <th>Kehadiran</th>
+          <th style="width: 300px;">Nama</th>
+          <th style="width: 150px;">Kehadiran</th>
           <th>Keterangan</th>
         </tr>
       </thead>
       <tbody>
-        <% siswa.forEach(s => { %>
+        <% siswa.forEach(s=> { %>
           <tr>
-            <td><%= s.nis %></td>
-            <td><%= s.nama %></td>
             <td>
-              <select name="kehadiran">
+              <%= s.nis %>
+            </td>
+            <td>
+              <%= s.nama %>
+            </td>
+            <td>
+              <select name="kehadiran" class="inputHadir">
                 <option value="Hadir">Hadir</option>
                 <option value="Ijin">Ijin</option>
                 <option value="Sakit">Sakit</option>
@@ -43,11 +54,13 @@
             </td>
             <td><input type="text" name="keterangan"></td>
           </tr>
-        <% }) %>
+          <% }) %>
       </tbody>
     </table>
 
     <button type="submit">Simpan</button>
-    <a href="/absensi">Batal</a>
+    <button type="button" class="btnCancel" onclick="window.location.href='/absensi'">Batal</button>
+
+    <!-- <a href="/absensi">Batal</a> -->
   </form>
-<% } %>
+  <% } %>

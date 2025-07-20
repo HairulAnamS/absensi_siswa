@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const { exec } = require('child_process');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts'); // ← tambahkan ini
 const app = express();
@@ -37,4 +38,9 @@ const routes = require('./routes/index');
 app.use('/', routes);
 
 // Run Server
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+// app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server jalan di http://localhost:${PORT}`);
+  exec(`start http://localhost:${PORT}`);
+});

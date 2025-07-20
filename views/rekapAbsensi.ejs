@@ -1,0 +1,86 @@
+<h3>Rekap Absensi</h3>
+
+<form action="/absensi/rekap/filter" method="GET" class="form-filter">
+  <div class="row">
+    <div class="form-group">
+      <label for="bulanAwal">Bulan Awal :</label>
+      <select name="bulanAwal" id="bulanAwal" required>
+        <option value="">-- Pilih Bulan Awal --</option>
+        <% bulanTahun.forEach(b=> { %>
+          <% const labelBulan=new Date(b + '-01' ).toLocaleDateString('id-ID', { month: 'long' , year: 'numeric' }); %>
+            <option value="<%= b %>" <%=selected.bulanAwal===b ? 'selected' : '' %>><%= labelBulan %>
+            </option>
+            <% }) %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="kelas_id">Kelas :</label>
+      <select name="kelas_id" id="kelas_id" required>
+        <option value="">-- Pilih Kelas --</option>
+        <% kelasList.forEach(k=> { %>
+          <option value="<%= k.id %>" <%=selected.kelas_id==k.id ? 'selected' : '' %>><%= k.nama %>
+          </option>
+          <% }) %>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="bulanAkhir">Bulan Akhir :</label>
+      <select name="bulanAkhir" id="bulanAkhir" required>
+        <option value="">-- Pilih Bulan Akhir --</option>
+        <% bulanTahun.forEach(b=> { %>
+          <% const labelBulan=new Date(b + '-01' ).toLocaleDateString('id-ID', { month: 'long' , year: 'numeric' }); %>
+            <option value="<%= b %>" <%=selected.bulanAkhir===b ? 'selected' : '' %>><%= labelBulan %>
+            </option>
+            <% }) %>
+      </select>
+    </div>
+  </div>
+  <button type="submit">Tampilkan</button>
+</form>
+
+<% if (hasilRekap) { %>
+  <h4>Hasil Rekap</h4>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr>
+        <th style="width: 50px;">No</th>
+        <th>NIS</th>
+        <th>Nama</th>
+        <th>Kelas</th>
+        <th style="width: 80px;">Ijin</th>
+        <th style="width: 80px;">Sakit</th>
+        <th style="width: 80px;">Alpha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% hasilRekap.forEach((s, i)=> { %>
+        <tr>
+          <td>
+            <%= i + 1 %>
+          </td>
+          <td>
+            <%= s.nis %>
+          </td>
+          <td>
+            <%= s.nama %>
+          </td>
+          <td>
+            <%= s.nama_kelas %>
+          </td>
+          <td>
+            <%= s.ijin || 0 %>
+          </td>
+          <td>
+            <%= s.sakit || 0 %>
+          </td>
+          <td>
+            <%= s.alpha || 0 %>
+          </td>
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+  <% } %>

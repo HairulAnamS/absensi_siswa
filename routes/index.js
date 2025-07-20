@@ -40,7 +40,12 @@ router.post('/siswa/edit/:id', siswaController.edit);
 // ==== Absensi ====
 router.get('/absensi', absensiController.listRekap);
 router.get('/absensi/input', absensiController.formInput);
+router.get('/absensi/rekap', absensiController.rekapForm);
 router.post('/absensi/simpan', absensiController.simpan);
 router.post('/absensi/hapus/:id', absensiController.hapus);
+router.post('/absensi/edit/:id', absensiController.edit);
+// router.get('/rekap', absensiController.rekapForm);
+router.get('/absensi/rekap/filter', absensiController.rekapHasil);
+
 
 module.exports = router;

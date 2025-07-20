@@ -1,30 +1,183 @@
+<div class="absensi-header">
+  <h3>Data Absensi</h3>
+  <div class="absensi-buttons">
+    <form action="#" method="GET">
+      <button formaction="/absensi/input" type="submit">Input Absensi</button>
+      <button formaction="/absensi/rekap" type="submit">Rekap Absensi</button>
+    </form>
+  </div>
+</div>
 
+<!-- Tombol Toggle Filter -->
+<button type="button" onclick="toggleFilter()" style="margin-top: 0px; width: 235px;">Tampilkan/Sembunyikan
+  Filter</button>
 
-<h3>Rekap Absensi</h3>
-<a href="/absensi/input">Input Absensi Hari Ini</a>
+<!-- Form Filter -->
+<form id="formFilter" class="form-filter" action="/absensi" method="GET"style="<%=  filter.kelas_id !== '' || filter.nis !== '' || filter.nama !== '' ? 'display:block;' : 'display:none;' %>; margin-top: 10px;">
+  <div class="row">
+    <div class="form-group">
+      <label for="tglAwal">Tgl Awal :</label>
+      <input type="date" id="tglAwal" name="tglAwal" value="<%= filter.tglAwal %>">
+    </div>
+    <div class="form-group">
+      <label for="nis">NIS :</label>
+      <input type="text" id="nis" name="nis" placeholder="Masukkan kata kunci..." value="<%= filter.nis %>">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label for="tglAkhir">Tgl Akhir :</label>
+      <input type="date" id="tglAkhir" name="tglAkhir" value="<%= filter.tglAkhir %>">
+    </div>
+    <div class="form-group">
+      <label for="nama">Nama :</label>
+      <input type="text" id="nama" name="nama" placeholder="Masukkan kata kunci..." value="<%= filter.nama %>">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label for="kelas_id">Kelas :</label>
+      <select id="kelas_id" name="kelas_id" style="width: 172px;">
+        <option value="">-- Semua Kelas --</option>
+        <% kelasList.forEach(k=> { %>
+          <option value="<%= k.id %>" <%=filter.kelas_id==k.id ? 'selected' : '' %>>
+            <%= k.nama %>
+          </option>
+          <% }) %>
+      </select>
+    </div>
+  </div>
+
+  <button type="submit" style="margin-left: 30px; width: 80px;">Filter</button>
+</form>
+
+<!-- Modal Edit -->
+<div id="modalEdit" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Edit Absensi</h3>
+    <form id="formEdit" method="POST">
+      <input type="hidden" name="id" id="editId">
+
+      <div class="modal-row">
+        <label>Tanggal :</label>
+        <span id="editTanggal"></span>
+      </div>
+      <div class="modal-row">
+        <label>Kelas :</label>
+        <span id="editKelas"></span>
+      </div>
+      <div class="modal-row">
+        <label>NIS :</label>
+        <span id="editNis"></span>
+      </div>
+      <div class="modal-row">
+        <label>Nama :</label>
+        <span id="editNama"></span>
+      </div>
+      <div class="modal-row">
+        <label for="editKehadiran">Kehadiran :</label>
+        <select name="kehadiran" id="editKehadiran" required>
+          <option value="Hadir">Hadir</option>
+          <option value="Ijin">Ijin</option>
+          <option value="Sakit">Sakit</option>
+          <option value="Alpha">Alpha</option>
+        </select>
+      </div>
+      <div class="modal-row">
+        <label for="editKeterangan">Keterangan :</label>
+        <input type="text" name="keterangan" id="editKeterangan">
+      </div>
+
+      <div style="margin-top: 10px;">
+        <button type="submit">Simpan</button>
+        <button type="button" class="btnCancel" onclick="tutupModal()">Batal</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
 <table>
   <thead>
     <tr>
-      <th>Tanggal</th><th>Kelas</th><th>NIS</th><th>Nama</th>
-      <th>Kehadiran</th><th>Keterangan</th><th>Aksi</th>
+      <th style="width: 80px;">Tanggal</th>
+      <th>Kelas</th>
+      <th>NIS</th>
+      <th>Nama</th>
+      <th style="width: 70px;">Kehadiran</th>
+      <th>Keterangan</th>
+      <th style="width: 140px;">Aksi</th>
     </tr>
   </thead>
   <tbody>
-    <% absensi.forEach(a => { %>
+    <% absensi.forEach(a=> { %>
       <tr>
-        <td><%= a.tanggal.toISOString().split('T')[0] %></td>
-        <td><%= a.kelas %></td>
-        <td><%= a.nis %></td>
-        <td><%= a.nama %></td>
-        <td><%= a.kehadiran %></td>
-        <td><%= a.keterangan %></td>
         <td>
-          <form action="/absensi/hapus/<%= a.id %>" method="POST">
-            <button onclick="return confirm('Hapus?')">Hapus</button>
+          <%= new Date(a.tanggal).toLocaleDateString('id-ID') %>
+        </td>
+        <td>
+          <%= a.kelas %>
+        </td>
+        <td>
+          <%= a.nis %>
+        </td>
+        <td>
+          <%= a.nama %>
+        </td>
+        <td>
+          <%= a.kehadiran %>
+        </td>
+        <td>
+          <%= a.keterangan %>
+        </td>
+        <td>
+
+          <button type="button" class="btnEdit" data-id="<%= a.id %>"
+            data-tanggal="<%= new Date(a.tanggal).toLocaleDateString('id-ID') %>" data-kelas="<%= a.kelas %>"
+            data-nis="<%= a.nis %>" data-nama="<%= a.nama %>" data-kehadiran="<%= a.kehadiran %>"
+            data-keterangan="<%= a.keterangan %>">
+            Edit
+          </button>
+
+          <form action="/absensi/hapus/<%= a.id %>" method="POST" style="display:inline">
+            <button class="btnHapus" onclick="return confirm('Hapus data?')">Hapus</button>
           </form>
         </td>
       </tr>
-    <% }) %>
+      <% }) %>
   </tbody>
 </table>
+<br></br>
+
+<script>
+  function toggleFilter() {
+    // alert("<%= filter.nis %>");
+    const form = document.getElementById('formFilter');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+
+  const modal = document.getElementById('modalEdit');
+  const formEdit = document.getElementById('formEdit');
+
+  document.querySelectorAll('.btnEdit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Isi data
+      document.getElementById('editId').value = btn.dataset.id;
+      document.getElementById('editTanggal').textContent = btn.dataset.tanggal;
+      document.getElementById('editKelas').textContent = btn.dataset.kelas;
+      document.getElementById('editNis').textContent = btn.dataset.nis;
+      document.getElementById('editNama').textContent = btn.dataset.nama;
+      document.getElementById('editKehadiran').value = btn.dataset.kehadiran;
+      document.getElementById('editKeterangan').value = btn.dataset.keterangan;
+
+      // Atur action form
+      formEdit.action = `/absensi/edit/${btn.dataset.id}`;
+
+      modal.style.display = 'block';
+    });
+  });
+
+  function tutupModal() {
+    modal.style.display = 'none';
+  }
+</script>
