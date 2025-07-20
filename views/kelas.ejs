@@ -20,10 +20,6 @@
     <!-- Form Filter -->
     <form id="formFilter" action="/kelas" method="GET"style="<%= typeof filter !== 'undefined' && filter !== '' ? 'display:block;' : 'display:none;' %>; margin-top: 10px;">
       <label>Cari Data :</label>
-      <!-- <select name="kolom">
-        <option value="nama" <%=filterKolom==='nama' ? 'selected' : '' %>>Nama</option>
-        <option value="kode" <%=filterKolom==='kode' ? 'selected' : '' %>>Kode</option>
-      </select> -->
       <input type="text" name="cari" placeholder="Masukkan kata kunci..."
         value="<%= typeof filter !== 'undefined' ? filter : '' %>">
       <button type="submit">Filter</button>
@@ -61,7 +57,6 @@
           <% }) %>
       </tbody>
     </table>
-    <br></br>
 
     <script>
       const form = document.getElementById('formKelas');

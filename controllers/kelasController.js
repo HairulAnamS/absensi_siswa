@@ -1,5 +1,14 @@
 const Kelas = require('../models/kelasModel');
 
+// exports.list = (req, res) => {
+//   Kelas.getAll((err, rows) => {
+//     res.render('kelas', {
+//       user: req.session.nama,
+//       kelas: rows
+//     });
+//   });
+// };
+
 exports.list = (req, res) => {
   const cari = req.query.cari || '';
   const kolom = req.query.kolom || 'nama'; // default 'nama'
